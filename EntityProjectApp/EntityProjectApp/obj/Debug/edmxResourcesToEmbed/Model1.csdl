@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DbEntityUrunModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Tbl_kategori">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AD" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tbl_urun" Relationship="Self.FK_Tbl_urun_Tbl_kategori" FromRole="Tbl_kategori" ToRole="Tbl_urun" />
+  </EntityType>
+  <EntityType Name="Tbl_musteriler">
+    <Key>
+      <PropertyRef Name="MUSTERIID" />
+    </Key>
+    <Property Name="MUSTERIID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MUSTERIAD" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="MUSTERISOYAD" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="SEHIR" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tbl_satıs" Relationship="Self.FK_Tbl_satıs_Tbl_musteriler" FromRole="Tbl_musteriler" ToRole="Tbl_satıs" />
+    <Property Name="DURUM" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="Tbl_satıs">
+    <Key>
+      <PropertyRef Name="SATISID" />
+    </Key>
+    <Property Name="SATISID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="URUN" Type="Int32" />
+    <Property Name="MUSTERI" Type="Int32" />
+    <Property Name="FIYAT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TARIH" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Tbl_musteriler" Relationship="Self.FK_Tbl_satıs_Tbl_musteriler" FromRole="Tbl_satıs" ToRole="Tbl_musteriler" />
+    <NavigationProperty Name="Tbl_urun" Relationship="Self.FK_Tbl_satıs_Tbl_urun" FromRole="Tbl_satıs" ToRole="Tbl_urun" />
+  </EntityType>
+  <EntityType Name="Tbl_urun">
+    <Key>
+      <PropertyRef Name="URUNID" />
+    </Key>
+    <Property Name="URUNID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="URUNAD" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="MARKA" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="STOK" Type="Int16" />
+    <Property Name="FIYAT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="DURUM" Type="Boolean" />
+    <Property Name="KATEGORI" Type="Int32" />
+    <NavigationProperty Name="Tbl_kategori" Relationship="Self.FK_Tbl_urun_Tbl_kategori" FromRole="Tbl_urun" ToRole="Tbl_kategori" />
+    <NavigationProperty Name="Tbl_satıs" Relationship="Self.FK_Tbl_satıs_Tbl_urun" FromRole="Tbl_urun" ToRole="Tbl_satıs" />
+  </EntityType>
+  <Association Name="FK_Tbl_urun_Tbl_kategori">
+    <End Role="Tbl_kategori" Type="Self.Tbl_kategori" Multiplicity="0..1" />
+    <End Role="Tbl_urun" Type="Self.Tbl_urun" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_kategori">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Tbl_urun">
+        <PropertyRef Name="KATEGORI" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_satıs_Tbl_musteriler">
+    <End Role="Tbl_musteriler" Type="Self.Tbl_musteriler" Multiplicity="0..1" />
+    <End Role="Tbl_satıs" Type="Self.Tbl_satıs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_musteriler">
+        <PropertyRef Name="MUSTERIID" />
+      </Principal>
+      <Dependent Role="Tbl_satıs">
+        <PropertyRef Name="MUSTERI" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_satıs_Tbl_urun">
+    <End Role="Tbl_urun" Type="Self.Tbl_urun" Multiplicity="0..1" />
+    <End Role="Tbl_satıs" Type="Self.Tbl_satıs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_urun">
+        <PropertyRef Name="URUNID" />
+      </Principal>
+      <Dependent Role="Tbl_satıs">
+        <PropertyRef Name="URUN" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DbEntityUrunEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Tbl_kategori" EntityType="Self.Tbl_kategori" />
+    <EntitySet Name="Tbl_musteriler" EntityType="Self.Tbl_musteriler" />
+    <EntitySet Name="Tbl_satıs" EntityType="Self.Tbl_satıs" />
+    <EntitySet Name="Tbl_urun" EntityType="Self.Tbl_urun" />
+    <AssociationSet Name="FK_Tbl_urun_Tbl_kategori" Association="Self.FK_Tbl_urun_Tbl_kategori">
+      <End Role="Tbl_kategori" EntitySet="Tbl_kategori" />
+      <End Role="Tbl_urun" EntitySet="Tbl_urun" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_satıs_Tbl_musteriler" Association="Self.FK_Tbl_satıs_Tbl_musteriler">
+      <End Role="Tbl_musteriler" EntitySet="Tbl_musteriler" />
+      <End Role="Tbl_satıs" EntitySet="Tbl_satıs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_satıs_Tbl_urun" Association="Self.FK_Tbl_satıs_Tbl_urun">
+      <End Role="Tbl_urun" EntitySet="Tbl_urun" />
+      <End Role="Tbl_satıs" EntitySet="Tbl_satıs" />
+    </AssociationSet>
+    <EntitySet Name="Tbl_Admin" EntityType="DbEntityUrunModel.Tbl_Admin" />
+  </EntityContainer>
+  <EntityType Name="Tbl_Admin">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KULLANICI" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="SIFRE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>
